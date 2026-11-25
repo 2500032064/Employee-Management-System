@@ -63,9 +63,16 @@
         <!-- CREATE ACCOUNT -->
         <div id="signupSection" class="hidden">
             <h2>Create Account</h2>
-            <p class="muted">Create an employee account. Admin and HR accounts are managed by your organization.</p>
+            <p class="muted" id="signupHelp">Create an employee account. HR will be notified with your profile details.</p>
 
             <form id="signupForm">
+                <label for="signupRole">Account Type</label>
+                <select id="signupRole" required>
+                    <option value="Employee">Employee</option>
+                    <option value="HR">HR Manager</option>
+                    <option value="Admin">Administrator</option>
+                </select>
+
                 <label>Full Name</label>
                 <input type="text" id="signupName"
                        placeholder="Enter your full name" required>
@@ -73,6 +80,28 @@
                 <label>Email Address</label>
                 <input type="email" id="signupEmail"
                        placeholder="Enter your email" required>
+
+                <div id="employeeSignupDetails">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="Enter your phone number" required>
+
+                    <label for="signupDepartment">Department</label>
+                    <select id="signupDepartment" required>
+                        <option value="">Select department</option>
+                        <option>Engineering</option>
+                        <option>Design</option>
+                        <option>Marketing</option>
+                        <option>Human Resources</option>
+                        <option>Finance</option>
+                        <option>Sales</option>
+                    </select>
+
+                    <label for="signupJobTitle">Job Title</label>
+                    <input type="text" id="signupJobTitle" placeholder="Enter your job title" required>
+
+                    <label for="signupJoiningDate">Joining Date</label>
+                    <input type="date" id="signupJoiningDate" required>
+                </div>
 
                 <label>Password</label>
                 <input type="password" id="signupPassword"
@@ -85,7 +114,7 @@
                 <p id="signupError" class="error-message"></p>
 
                 <button type="submit" class="login-btn">
-                    Create Employee Account →
+                    <span id="signupButtonLabel">Create Employee Account →</span>
                 </button>
             </form>
 
@@ -116,6 +145,7 @@
         <button class="nav" data-page="employees" data-icon="♙">♙ Employees</button>
         <button class="nav" data-page="attendance" data-icon="◷">◷ Attendance</button>
         <button class="nav" data-page="leaves" data-icon="▤">▤ Leave Requests</button>
+        <button class="nav hidden" data-page="notifications" data-icon="!">🔔 Notifications</button>
         <button class="nav" data-page="payroll" data-icon="$">＄ Payroll</button>
         <button class="nav" data-page="performance" data-icon="★">★ Performance</button>
         <button class="nav" data-page="recruitment" data-icon="+">＋ Recruitment</button>
@@ -163,6 +193,17 @@
                     <p id="welcomeMessage">Manage your team, track attendance and simplify HR operations.</p>
                 </div>
                 <div class="banner-art">✦</div>
+            </div>
+
+            <div id="hrNotificationSummary" class="content-card hidden">
+                <div class="section-heading">
+                    <div>
+                        <h2>HR Notifications</h2>
+                        <p id="hrNotificationMessage"></p>
+                    </div>
+                    <button class="primary-btn" type="button" onclick="showPage('notifications')">View Notifications</button>
+                </div>
+                <p id="hrNotificationDetails" class="notification-details"></p>
             </div>
 
             <div class="stats-grid">
@@ -358,6 +399,32 @@
                             </tr>
                         </thead>
                         <tbody id="leaveList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- HR NOTIFICATIONS -->
+        <section id="notifications" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>HR Notifications</h2>
+                    <p>New employee registrations and submitted leave requests.</p>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Notification</th>
+                                <th>Employee Details</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notificationList"></tbody>
                     </table>
                 </div>
             </div>
