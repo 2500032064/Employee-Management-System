@@ -3,1198 +3,620 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMS | Employee Management System</title>
+    <title>PeoplePulse - Employee Management</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- ================= AUTH ================= -->
+<!-- LOGIN PAGE -->
+<section id="loginPage" class="login-page">
+    <div class="bg-circle circle-one"></div>
+    <div class="bg-circle circle-two"></div>
+    <div class="bg-circle circle-three"></div>
 
-<div class="auth-page" id="authPage">
-
-    <div class="auth-left">
-        <div class="auth-brand">
-            <div class="brand-logo">EMS</div>
-            <span>EmployeeHub</span>
-        </div>
-
-        <div class="auth-content">
-            <span class="eyebrow">SMART WORKFORCE MANAGEMENT</span>
-            <h1>Manage your workforce<br><span>smarter & faster.</span></h1>
-            <p>
-                A modern platform to manage employees, attendance,
-                payroll, leaves and performance from one place.
-            </p>
-
-            <div class="auth-features">
-                <div>✓ Easy employee management</div>
-                <div>✓ Real-time attendance tracking</div>
-                <div>✓ Secure payroll management</div>
-            </div>
-        </div>
-
-        <div class="auth-footer">
-            © 2026 EmployeeHub
-        </div>
-    </div>
-
-
-    <div class="auth-right">
+    <div class="login-card">
+        <div class="brand-logo">P</div>
+        <h1>PeoplePulse</h1>
+        <p class="login-subtitle">EMPLOYEE MANAGEMENT PLATFORM</p>
 
         <!-- LOGIN -->
+        <div id="loginSection">
+            <h2>Welcome Back!</h2>
+            <p class="muted">Sign in to access your workspace.</p>
 
-        <div class="auth-card" id="loginCard">
+            <form id="loginForm">
 
-            <div class="mobile-logo">EMS</div>
+                <label>Login As</label>
+                <select id="loginRole" required>
+                    <option value="Admin">Administrator</option>
+                    <option value="HR">HR Manager</option>
+                    <option value="Employee">Employee</option>
+                </select>
 
-            <h2>Welcome back 👋</h2>
-            <p>Sign in to access your dashboard</p>
+                <label>Email Address</label>
+                <input type="email" id="loginEmail"
+                       placeholder="Enter your email" required>
 
-            <div class="role-selector">
+                <label>Password</label>
+                <input type="password" id="loginPassword"
+                       placeholder="Enter your password" required>
 
-                <button class="role active"
-                        onclick="selectRole('Admin',this)">
-                    Admin
-                </button>
+                <p id="loginError" class="error-message"></p>
 
-                <button class="role"
-                        onclick="selectRole('HR Manager',this)">
-                    HR Manager
-                </button>
+                <button type="submit" class="login-btn">Sign In →</button>
+            </form>
 
-                <button class="role"
-                        onclick="selectRole('Employee',this)">
-                    Employee
-                </button>
-
-            </div>
-
-            <input type="hidden" id="loginRole" value="Admin">
-
-            <label>Email</label>
-            <div class="input-box">
-                <span>✉</span>
-                <input id="loginEmail"
-                       type="email"
-                       placeholder="you@example.com">
-            </div>
-
-            <label>Password</label>
-            <div class="input-box">
-                <span>🔒</span>
-                <input id="loginPassword"
-                       type="password"
-                       placeholder="Enter password">
-            </div>
-
-            <div class="form-options">
-                <label class="remember">
-                    <input type="checkbox">
-                    Remember me
-                </label>
-
-                <a href="#">Forgot password?</a>
-            </div>
-
-            <button class="main-auth-btn" onclick="login()">
-                Sign In <span>→</span>
-            </button>
-
-            <div class="divider">
-                <span>OR</span>
-            </div>
-
-            <p class="create-text">
+            <p class="account-link">
                 Don't have an account?
-                <b onclick="showSignup()">Create Account</b>
+                <a href="#" onclick="showSignup(); return false;">Create an Account</a>
             </p>
 
-            <div class="demo-box">
-                <strong>Demo Login</strong>
-                <small>Admin: admin@ems.com / admin123</small>
-                <small>HR: hr@ems.com / hr123</small>
-                <small>Employee: employee@ems.com / emp123</small>
+            <div class="demo-details">
+                <strong>DEMO ACCOUNTS</strong><br>
+                Admin: admin@gmail.com / admin123<br>
+                HR: hr@gmail.com / hr123<br>
+                Employee: employee@gmail.com / employee123
             </div>
-
         </div>
 
+        <!-- CREATE ACCOUNT -->
+        <div id="signupSection" class="hidden">
+            <h2>Create Account</h2>
+            <p class="muted">Create an employee account. Admin and HR accounts are managed by your organization.</p>
 
-        <!-- SIGN UP -->
+            <form id="signupForm">
+                <label>Full Name</label>
+                <input type="text" id="signupName"
+                       placeholder="Enter your full name" required>
 
-        <div class="auth-card signup-card" id="signupCard">
+                <label>Email Address</label>
+                <input type="email" id="signupEmail"
+                       placeholder="Enter your email" required>
 
-            <div class="mobile-logo">EMS</div>
+                <label>Password</label>
+                <input type="password" id="signupPassword"
+                       placeholder="Minimum 6 characters" minlength="6" required>
 
-            <h2>Create your account ✨</h2>
-            <p>Get started with EmployeeHub</p>
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPassword"
+                       placeholder="Confirm your password" minlength="6" required>
 
-            <label>Full Name</label>
-            <div class="input-box">
-                <span>👤</span>
-                <input id="signupName"
-                       type="text"
-                       placeholder="Your full name">
-            </div>
+                <p id="signupError" class="error-message"></p>
 
-            <label>Email</label>
-            <div class="input-box">
-                <span>✉</span>
-                <input id="signupEmail"
-                       type="email"
-                       placeholder="you@example.com">
-            </div>
+                <button type="submit" class="login-btn">
+                    Create Employee Account →
+                </button>
+            </form>
 
-            <label>Phone</label>
-            <div class="input-box">
-                <span>☎</span>
-                <input id="signupPhone"
-                       type="text"
-                       placeholder="Phone number">
-            </div>
-
-            <label>Role</label>
-
-            <select id="signupRole">
-                <option value="Employee">Employee</option>
-                <option value="HR Manager">HR Manager</option>
-                <option value="Admin">Admin</option>
-            </select>
-
-            <label>Password</label>
-
-            <div class="input-box">
-                <span>🔒</span>
-                <input id="signupPassword"
-                       type="password"
-                       placeholder="Create password">
-            </div>
-
-            <label>Confirm Password</label>
-
-            <div class="input-box">
-                <span>🔒</span>
-                <input id="signupConfirm"
-                       type="password"
-                       placeholder="Confirm password">
-            </div>
-
-            <button class="main-auth-btn" onclick="createAccount()">
-                Create Account <span>→</span>
-            </button>
-
-            <p class="create-text">
+            <p class="account-link">
                 Already have an account?
-                <b onclick="showLogin()">Sign In</b>
+                <a href="#" onclick="showLogin(); return false;">Login</a>
             </p>
-
         </div>
-
     </div>
-</div>
+</section>
 
-
-<!-- ================= APPLICATION ================= -->
-
-<div class="application" id="application">
+<!-- MAIN WEBSITE -->
+<div id="mainWebsite" class="app-container hidden">
 
     <!-- SIDEBAR -->
-
     <aside class="sidebar">
-
         <div class="sidebar-brand">
-            <div class="brand-logo">EMS</div>
+            <div class="brand-logo small-logo">P</div>
             <div>
-                <strong>EmployeeHub</strong>
-                <small>Management System</small>
+                <h2>PeoplePulse</h2>
+                <span id="workspaceRole">Employee Workspace</span>
             </div>
         </div>
 
-        <div class="menu-title">MAIN MENU</div>
+        <p class="menu-label">MAIN MENU</p>
 
-        <nav>
-
-            <button class="nav-link active"
-                    onclick="showPage('dashboard',this)">
-                <span>⌂</span>
-                Dashboard
-            </button>
-
-            <button class="nav-link"
-                    onclick="showPage('employees',this)">
-                <span>♙</span>
-                Employees
-            </button>
-
-            <button class="nav-link"
-                    onclick="showPage('attendance',this)">
-                <span>◷</span>
-                Attendance
-            </button>
-
-            <button class="nav-link"
-                    onclick="showPage('leave',this)">
-                <span>▣</span>
-                Leave
-                <em>8</em>
-            </button>
-
-            <button class="nav-link"
-                    onclick="showPage('payroll',this)">
-                <span>₹</span>
-                Payroll
-            </button>
-
-            <button class="nav-link"
-                    onclick="showPage('performance',this)">
-                <span>★</span>
-                Performance
-            </button>
-
-        </nav>
-
-        <div class="menu-title">SYSTEM</div>
-
-        <nav>
-
-            <button class="nav-link">
-                <span>⚙</span>
-                Settings
-            </button>
-
-            <button class="nav-link">
-                <span>?</span>
-                Help Center
-            </button>
-
-        </nav>
+        <button class="nav active" data-page="dashboard" data-icon="▦">▦ Dashboard</button>
+        <button class="nav" data-page="employees" data-icon="♙">♙ Employees</button>
+        <button class="nav" data-page="attendance" data-icon="◷">◷ Attendance</button>
+        <button class="nav" data-page="leaves" data-icon="▤">▤ Leave Requests</button>
+        <button class="nav" data-page="payroll" data-icon="$">＄ Payroll</button>
+        <button class="nav" data-page="performance" data-icon="★">★ Performance</button>
+        <button class="nav" data-page="recruitment" data-icon="+">＋ Recruitment</button>
+        <button class="nav" data-page="training" data-icon="▣">▣ Training</button>
+        <button class="nav" data-page="assets" data-icon="◇">◇ Assets</button>
+        <button class="nav" data-page="reports" data-icon="▤">▤ Reports</button>
+        <button class="nav" data-page="profile" data-icon="♙">♙ My Profile</button>
+        <button class="nav hidden" data-page="accounts" data-icon="⚙">⚙ Account Access</button>
 
         <div class="sidebar-bottom">
-
             <div class="profile-mini">
-
-                <div class="profile-avatar"
-                     id="sideAvatar">
-                    A
-                </div>
-
+                <div class="avatar">P</div>
                 <div>
-                    <strong id="sideName">Admin</strong>
-                    <small id="sideRole">Administrator</small>
+                    <strong id="adminName">Admin</strong>
+                    <span id="userRoleLabel">HR Administrator</span>
                 </div>
-
-                <span>•••</span>
-
             </div>
-
-            <button class="logout" onclick="logout()">
-                ⇥ Logout
-            </button>
-
+            <button class="logout-btn" onclick="logout()">↪ Logout</button>
         </div>
-
     </aside>
 
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-        <!-- TOPBAR -->
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
         <header class="topbar">
-
-            <div class="mobile-menu">☰</div>
-
             <div>
-                <h1 id="pageTitle">Dashboard</h1>
-                <p id="pageSub">
-                    Here's what's happening with your workforce today.
-                </p>
+                <p class="top-small">WORKSPACE / <span id="breadcrumb">DASHBOARD</span></p>
+                <h1 id="pageName">Dashboard</h1>
             </div>
 
-            <div class="top-actions">
-
-                <div class="search-global">
-                    🔍
-                    <input placeholder="Search anything...">
-                    <kbd>⌘ K</kbd>
-                </div>
-
-                <button class="icon-btn">
-                    🔔
-                    <i></i>
-                </button>
-
-                <div class="top-profile">
-                    <div class="top-avatar" id="topAvatar">A</div>
-                    <div>
-                        <strong id="topName">Admin</strong>
-                        <small id="topRole">Administrator</small>
-                    </div>
-                    <span>⌄</span>
-                </div>
-
+            <div class="top-right">
+                <span class="online-dot"></span>
+                <span>Workspace Active</span>
+                <div class="avatar" id="topAvatar">P</div>
             </div>
-
         </header>
 
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page">
 
-        <!-- ================= DASHBOARD ================= -->
-
-        <section class="page active" id="dashboard">
-
-            <div class="hero">
-
+            <div class="welcome-banner">
                 <div>
-                    <span>GOOD MORNING 👋</span>
-                    <h2>Welcome back, <strong id="welcomeName">Admin</strong></h2>
-                    <p>
-                        Here's a quick overview of your organization today.
-                    </p>
+                    <span class="banner-tag">PEOPLE FIRST. ALWAYS.</span>
+                    <h2>Welcome, <span id="welcomeName">there</span> 👋</h2>
+                    <p id="welcomeMessage">Manage your team, track attendance and simplify HR operations.</p>
                 </div>
-
-                <div class="hero-date">
-                    <span>Today</span>
-                    <strong id="currentDate"></strong>
-                </div>
-
+                <div class="banner-art">✦</div>
             </div>
 
-
-            <!-- STATS -->
-
-            <div class="stats">
-
+            <div class="stats-grid">
                 <div class="stat-card">
-
-                    <div class="stat-top">
-                        <div class="stat-icon purple">♙</div>
-                        <span class="trend up">+12.5%</span>
-                    </div>
-
+                    <div class="stat-icon purple">♙</div>
                     <p>Total Employees</p>
-                    <h2>125</h2>
-                    <small>Compared to last month</small>
-
+                    <h2 id="totalEmployees">0</h2>
+                    <span>Active team members</span>
                 </div>
 
-
                 <div class="stat-card">
-
-                    <div class="stat-top">
-                        <div class="stat-icon green">✓</div>
-                        <span class="trend up">+4.2%</span>
-                    </div>
-
+                    <div class="stat-icon green">✓</div>
                     <p>Present Today</p>
-                    <h2>112</h2>
-                    <small>89.6% attendance rate</small>
-
+                    <h2 id="presentCount">0</h2>
+                    <span>Attendance records</span>
                 </div>
-
 
                 <div class="stat-card">
-
-                    <div class="stat-top">
-                        <div class="stat-icon orange">▣</div>
-                        <span class="trend neutral">8 Pending</span>
-                    </div>
-
-                    <p>Leave Requests</p>
-                    <h2>18</h2>
-                    <small>10 approved this month</small>
-
+                    <div class="stat-icon orange">◷</div>
+                    <p>Pending Leaves</p>
+                    <h2 id="pendingCount">0</h2>
+                    <span>Awaiting approval</span>
                 </div>
-
 
                 <div class="stat-card">
-
-                    <div class="stat-top">
-                        <div class="stat-icon blue">₹</div>
-                        <span class="trend up">+5.8%</span>
-                    </div>
-
-                    <p>Monthly Payroll</p>
-                    <h2>₹8.4L</h2>
-                    <small>Compared to last month</small>
-
+                    <div class="stat-icon blue">▦</div>
+                    <p>Departments</p>
+                    <h2 id="departmentCount">0</h2>
+                    <span>Across the company</span>
                 </div>
-
             </div>
 
+            <div class="content-card">
+                <div class="section-heading">
+                    <div>
+                        <h2>Recent Employees</h2>
+                        <p>Your latest team members</p>
+                    </div>
+                    <button class="primary-btn" onclick="showPage('employees')">
+                        View All →
+                    </button>
+                </div>
 
-            <!-- CHART + ACTIVITY -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentEmployees"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
-            <div class="content-grid">
+        <!-- EMPLOYEES -->
+        <section id="employees" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Employee Directory</h2>
+                    <p>Manage all your employees in one place.</p>
+                </div>
+                <button id="addEmployeeButton" class="primary-btn" onclick="openForm()">+ Add Employee</button>
+            </div>
 
-                <div class="panel large-panel">
+            <div class="content-card">
+                <input type="text" id="searchInput"
+                       class="search-input"
+                       placeholder="Search employees..."
+                       oninput="renderEmployees()">
 
-                    <div class="panel-head">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeList"></tbody>
+                    </table>
+                </div>
+            </div>
 
-                        <div>
-                            <h3>Attendance Overview</h3>
-                            <p>Daily attendance for this week</p>
-                        </div>
+            <div id="employeeForm" class="modal hidden">
+                <div class="modal-content">
+                    <button class="close-btn" onclick="closeForm()">×</button>
+                    <h2>Add New Employee</h2>
+                    <p class="muted">Enter employee details below.</p>
 
-                        <select>
-                            <option>This Week</option>
-                            <option>This Month</option>
-                            <option>This Year</option>
+                    <form id="addEmployeeForm">
+                        <label>Full Name</label>
+                        <input type="text" id="empName" placeholder="Employee name" required>
+
+                        <label>Email</label>
+                        <input type="email" id="empEmail" placeholder="employee@gmail.com" required>
+
+                        <label>Department</label>
+                        <select id="empDept" required>
+                            <option value="">Select Department</option>
+                            <option>Engineering</option>
+                            <option>Design</option>
+                            <option>Marketing</option>
+                            <option>Human Resources</option>
+                            <option>Finance</option>
+                            <option>Sales</option>
                         </select>
 
-                    </div>
+                        <label>Job Role</label>
+                        <input type="text" id="empRole" placeholder="Job title" required>
 
-                    <div class="chart">
-
-                        <div class="chart-labels">
-                            <span>100%</span>
-                            <span>75%</span>
-                            <span>50%</span>
-                            <span>25%</span>
-                            <span>0%</span>
-                        </div>
-
-                        <div class="bars">
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:78%"></div>
-                                <span>Mon</span>
-                            </div>
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:88%"></div>
-                                <span>Tue</span>
-                            </div>
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:72%"></div>
-                                <span>Wed</span>
-                            </div>
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:94%"></div>
-                                <span>Thu</span>
-                            </div>
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:84%"></div>
-                                <span>Fri</span>
-                            </div>
-
-                            <div class="bar-column">
-                                <div class="bar" style="height:63%"></div>
-                                <span>Sat</span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                        <button type="submit" class="primary-btn full-btn">Save Employee</button>
+                    </form>
                 </div>
-
-
-                <div class="panel">
-
-                    <div class="panel-head">
-                        <div>
-                            <h3>Quick Actions</h3>
-                            <p>Common tasks</p>
-                        </div>
-                    </div>
-
-                    <div class="quick-grid">
-
-                        <button onclick="openEmployeeModal()">
-                            <span>＋</span>
-                            Add Employee
-                        </button>
-
-                        <button onclick="showPage('attendance')">
-                            <span>✓</span>
-                            Mark Attendance
-                        </button>
-
-                        <button onclick="showPage('leave')">
-                            <span>▣</span>
-                            Review Leaves
-                        </button>
-
-                        <button onclick="showPage('payroll')">
-                            <span>₹</span>
-                            View Payroll
-                        </button>
-
-                    </div>
-
-                </div>
-
             </div>
-
-
-            <!-- RECENT + DEPARTMENTS -->
-
-            <div class="content-grid bottom-grid">
-
-                <div class="panel">
-
-                    <div class="panel-head">
-
-                        <div>
-                            <h3>Recent Employees</h3>
-                            <p>Recently added employees</p>
-                        </div>
-
-                        <button class="view-btn"
-                                onclick="showPage('employees')">
-                            View All →
-                        </button>
-
-                    </div>
-
-                    <div class="recent-list">
-
-                        <div class="recent-item">
-                            <div class="person-avatar">RK</div>
-                            <div>
-                                <strong>Rahul Kumar</strong>
-                                <small>Software Developer · IT</small>
-                            </div>
-                            <span class="active-dot">Active</span>
-                        </div>
-
-                        <div class="recent-item">
-                            <div class="person-avatar pink">SR</div>
-                            <div>
-                                <strong>Sneha Reddy</strong>
-                                <small>HR Executive · HR</small>
-                            </div>
-                            <span class="active-dot">Active</span>
-                        </div>
-
-                        <div class="recent-item">
-                            <div class="person-avatar orange">AS</div>
-                            <div>
-                                <strong>Arjun Singh</strong>
-                                <small>Accountant · Finance</small>
-                            </div>
-                            <span class="leave-dot">Leave</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="panel">
-
-                    <div class="panel-head">
-                        <div>
-                            <h3>Department Overview</h3>
-                            <p>Employees by department</p>
-                        </div>
-                    </div>
-
-                    <div class="department">
-
-                        <div>
-                            <span>IT Department</span>
-                            <strong>48</strong>
-                        </div>
-
-                        <div class="dept-progress">
-                            <i style="width:82%"></i>
-                        </div>
-
-                        <div>
-                            <span>HR Department</span>
-                            <strong>24</strong>
-                        </div>
-
-                        <div class="dept-progress">
-                            <i style="width:52%"></i>
-                        </div>
-
-                        <div>
-                            <span>Finance</span>
-                            <strong>21</strong>
-                        </div>
-
-                        <div class="dept-progress">
-                            <i style="width:45%"></i>
-                        </div>
-
-                        <div>
-                            <span>Marketing</span>
-                            <strong>32</strong>
-                        </div>
-
-                        <div class="dept-progress">
-                            <i style="width:68%"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
         </section>
 
-
-        <!-- ================= EMPLOYEES ================= -->
-
-        <section class="page" id="employees">
-
+        <!-- ATTENDANCE -->
+        <section id="attendance" class="page hidden">
             <div class="section-heading">
-
                 <div>
-                    <span class="section-label">WORKFORCE</span>
-                    <h2>Employee Management</h2>
-                    <p>Manage your organization's employees.</p>
+                    <h2>Attendance Overview</h2>
+                    <p>Track your team's daily attendance.</p>
                 </div>
-
-                <button class="primary-btn"
-                        onclick="openEmployeeModal()">
-                    + Add Employee
-                </button>
-
+                <button id="markPresentButton" class="primary-btn" onclick="markPresent()">+ Mark Present</button>
             </div>
 
-            <div class="panel">
-
-                <div class="table-tools">
-
-                    <div class="table-search">
-                        🔍
-                        <input
-                            id="employeeSearch"
-                            onkeyup="searchEmployees()"
-                            placeholder="Search employees..."
-                        >
-                    </div>
-
-                    <div class="filters">
-                        <button>All Departments ▾</button>
-                        <button>All Status ▾</button>
-                    </div>
-
-                </div>
+            <div class="content-card">
+                <h2>Today's Attendance</h2>
+                <p class="muted" id="todayDate"></p>
 
                 <div class="table-wrap">
-
-                    <table id="employeeTable">
-
-                        <thead>
-                            <tr>
-                                <th>EMPLOYEE</th>
-                                <th>DEPARTMENT</th>
-                                <th>POSITION</th>
-                                <th>STATUS</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>
-                                    <div class="employee-cell">
-                                        <div class="person-avatar">RK</div>
-                                        <div>
-                                            <strong>Rahul Kumar</strong>
-                                            <small>rahul@company.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>IT</td>
-                                <td>Software Developer</td>
-
-                                <td>
-                                    <span class="status active">
-                                        Active
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td>
-                                    <div class="employee-cell">
-                                        <div class="person-avatar pink">SR</div>
-                                        <div>
-                                            <strong>Sneha Reddy</strong>
-                                            <small>sneha@company.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>HR</td>
-                                <td>HR Executive</td>
-
-                                <td>
-                                    <span class="status active">
-                                        Active
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td>
-                                    <div class="employee-cell">
-                                        <div class="person-avatar orange">AS</div>
-                                        <div>
-                                            <strong>Arjun Singh</strong>
-                                            <small>arjun@company.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>Finance</td>
-                                <td>Accountant</td>
-
-                                <td>
-                                    <span class="status leave">
-                                        On Leave
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                </td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= ATTENDANCE ================= -->
-
-        <section class="page" id="attendance">
-
-            <div class="section-heading">
-
-                <div>
-                    <span class="section-label">TIME TRACKING</span>
-                    <h2>Attendance</h2>
-                    <p>Monitor daily employee attendance.</p>
-                </div>
-
-                <button class="primary-btn">
-                    + Mark Attendance
-                </button>
-
-            </div>
-
-            <div class="stats mini-stats">
-
-                <div class="stat-card">
-                    <p>Present</p>
-                    <h2>112</h2>
-                    <small class="green-text">89.6%</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>Absent</p>
-                    <h2>7</h2>
-                    <small class="red-text">5.6%</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>Late</p>
-                    <h2>6</h2>
-                    <small class="orange-text">4.8%</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>On Leave</p>
-                    <h2>8</h2>
-                    <small>Today</small>
-                </div>
-
-            </div>
-
-            <div class="panel">
-
-                <div class="table-wrap">
-
                     <table>
-
                         <thead>
                             <tr>
-                                <th>EMPLOYEE</th>
-                                <th>DATE</th>
-                                <th>CHECK IN</th>
-                                <th>CHECK OUT</th>
-                                <th>STATUS</th>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>Rahul Kumar</td>
-                                <td>23 Sep 2026</td>
-                                <td>09:02 AM</td>
-                                <td>06:05 PM</td>
-                                <td><span class="status active">Present</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Sneha Reddy</td>
-                                <td>23 Sep 2026</td>
-                                <td>09:15 AM</td>
-                                <td>06:00 PM</td>
-                                <td><span class="status active">Present</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Arjun Singh</td>
-                                <td>23 Sep 2026</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td><span class="status leave">On Leave</span></td>
-                            </tr>
-
-                        </tbody>
-
+                        <tbody id="attendanceList"></tbody>
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- ================= LEAVE ================= -->
-
-        <section class="page" id="leave">
-
+        <!-- LEAVES -->
+        <section id="leaves" class="page hidden">
             <div class="section-heading">
-
                 <div>
-                    <span class="section-label">TIME OFF</span>
                     <h2>Leave Management</h2>
                     <p>Review and manage employee leave requests.</p>
                 </div>
-
-                <button class="primary-btn">
-                    + Apply Leave
-                </button>
-
             </div>
 
-            <div class="panel">
+            <div id="leaveRequestCard" class="content-card hidden">
+                <h2>Request Leave</h2>
+                <p class="muted">Send a leave request to your HR team.</p>
+                <form id="leaveRequestForm" class="leave-request-form">
+                    <label for="leaveType">Leave Type</label>
+                    <select id="leaveType" required>
+                        <option value="">Select leave type</option>
+                        <option>Annual Leave</option>
+                        <option>Sick Leave</option>
+                        <option>Personal Leave</option>
+                    </select>
+                    <label for="leaveStart">Start Date</label>
+                    <input type="date" id="leaveStart" required>
+                    <label for="leaveEnd">End Date</label>
+                    <input type="date" id="leaveEnd" required>
+                    <p id="leaveError" class="error-message"></p>
+                    <button type="submit" class="primary-btn">Submit Request</button>
+                </form>
+            </div>
 
+            <div class="content-card">
                 <div class="table-wrap">
-
                     <table>
-
                         <thead>
                             <tr>
-                                <th>EMPLOYEE</th>
-                                <th>LEAVE TYPE</th>
-                                <th>FROM</th>
-                                <th>TO</th>
-                                <th>STATUS</th>
-                                <th>ACTION</th>
+                                <th>Employee</th>
+                                <th>Leave Type</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>Arjun Singh</td>
-                                <td>Casual Leave</td>
-                                <td>24 Sep</td>
-                                <td>25 Sep</td>
-                                <td>
-                                    <span class="status pending">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="approve">Approve</button>
-                                    <button class="reject">Reject</button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Priya Sharma</td>
-                                <td>Sick Leave</td>
-                                <td>22 Sep</td>
-                                <td>23 Sep</td>
-                                <td>
-                                    <span class="status active">
-                                        Approved
-                                    </span>
-                                </td>
-                                <td>—</td>
-                            </tr>
-
-                        </tbody>
-
+                        <tbody id="leaveList"></tbody>
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- ================= PAYROLL ================= -->
-
-        <section class="page" id="payroll">
-
+        <!-- PAYROLL -->
+        <section id="payroll" class="page hidden">
             <div class="section-heading">
-
                 <div>
-                    <span class="section-label">FINANCE</span>
                     <h2>Payroll</h2>
-                    <p>Manage salary and payroll information.</p>
+                    <p>Review pay records and monthly compensation.</p>
                 </div>
-
-                <button class="primary-btn">
-                    Generate Payroll
-                </button>
-
             </div>
-
-            <div class="stats">
-
-                <div class="stat-card">
-                    <p>Gross Salary</p>
-                    <h2>₹9.5L</h2>
-                    <small>Before deductions</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>Total Deductions</p>
-                    <h2>₹1.1L</h2>
-                    <small>Tax & benefits</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>Net Salary</p>
-                    <h2>₹8.4L</h2>
-                    <small class="green-text">Ready for payment</small>
-                </div>
-
-                <div class="stat-card">
-                    <p>Employees Paid</p>
-                    <h2>117</h2>
-                    <small>Out of 125</small>
-                </div>
-
+            <div id="payrollFormCard" class="content-card">
+                <h2>Add Payroll Record</h2>
+                <form id="payrollForm" class="module-form">
+                    <label for="payrollEmail">Employee Email</label>
+                    <input type="email" id="payrollEmail" placeholder="employee@company.com" required>
+                    <label for="payrollPeriod">Pay Period</label>
+                    <input type="month" id="payrollPeriod" required>
+                    <label for="payrollAmount">Net Pay</label>
+                    <input type="number" id="payrollAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                    <p id="payrollError" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Save Payroll Record</button>
+                </form>
             </div>
-
-            <div class="panel">
-
+            <div class="content-card">
                 <div class="table-wrap">
-
                     <table>
+                        <thead><tr><th>Employee</th><th>Pay Period</th><th>Net Pay</th></tr></thead>
+                        <tbody id="payrollList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
+        <!-- PERFORMANCE -->
+        <section id="performance" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Performance Reviews</h2>
+                    <p>Track review cycles and share actionable feedback.</p>
+                </div>
+            </div>
+            <div id="reviewFormCard" class="content-card">
+                <h2>Record a Review</h2>
+                <form id="reviewForm" class="module-form">
+                    <label for="reviewEmail">Employee Email</label>
+                    <input type="email" id="reviewEmail" placeholder="employee@company.com" required>
+                    <label for="reviewCycle">Review Cycle</label>
+                    <input type="text" id="reviewCycle" placeholder="e.g. H2 2026" required>
+                    <label for="reviewRating">Rating (1–5)</label>
+                    <input type="number" id="reviewRating" min="1" max="5" step="1" required>
+                    <label for="reviewFeedback">Feedback</label>
+                    <textarea id="reviewFeedback" rows="3" placeholder="Add review feedback" required></textarea>
+                    <p id="reviewError" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Save Review</button>
+                </form>
+            </div>
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Employee</th><th>Cycle</th><th>Rating</th><th>Feedback</th></tr></thead>
+                        <tbody id="reviewList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- RECRUITMENT -->
+        <section id="recruitment" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Recruitment</h2>
+                    <p>Manage open roles and employee applications.</p>
+                </div>
+            </div>
+            <div id="jobFormCard" class="content-card">
+                <h2>Post an Opening</h2>
+                <form id="jobForm" class="module-form">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" placeholder="e.g. Product Designer" required>
+                    <label for="jobDepartment">Department</label>
+                    <input type="text" id="jobDepartment" placeholder="Department" required>
+                    <label for="jobLocation">Location</label>
+                    <input type="text" id="jobLocation" placeholder="Office or remote" required>
+                    <p id="jobError" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Publish Opening</button>
+                </form>
+            </div>
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Position</th><th>Department</th><th>Location</th><th>Applications</th><th>Action</th></tr></thead>
+                        <tbody id="jobList"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="applicationsCard" class="content-card">
+                <h2>Applications</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Candidate</th><th>Email</th><th>Position</th><th>Applied</th></tr></thead>
+                        <tbody id="applicationList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRAINING -->
+        <section id="training" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Training &amp; Development</h2>
+                    <p>Share learning opportunities and track enrollment.</p>
+                </div>
+            </div>
+            <div id="courseFormCard" class="content-card">
+                <h2>Create a Course</h2>
+                <form id="courseForm" class="module-form">
+                    <label for="courseTitle">Course Name</label>
+                    <input type="text" id="courseTitle" placeholder="Course title" required>
+                    <label for="courseDate">Start Date</label>
+                    <input type="date" id="courseDate" required>
+                    <label for="courseDescription">Description</label>
+                    <textarea id="courseDescription" rows="3" placeholder="What will employees learn?" required></textarea>
+                    <p id="courseError" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Publish Course</button>
+                </form>
+            </div>
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Course</th><th>Start Date</th><th>Description</th><th>Enrolled</th><th>Action</th></tr></thead>
+                        <tbody id="courseList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASSET MANAGEMENT -->
+        <section id="assets" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Asset Management</h2>
+                    <p>Keep track of equipment assigned to your team.</p>
+                </div>
+            </div>
+            <div id="assetFormCard" class="content-card">
+                <h2>Assign an Asset</h2>
+                <form id="assetForm" class="module-form">
+                    <label for="assetName">Asset</label>
+                    <input type="text" id="assetName" placeholder="e.g. Laptop" required>
+                    <label for="assetTag">Asset Tag</label>
+                    <input type="text" id="assetTag" placeholder="e.g. LAP-104" required>
+                    <label for="assetEmail">Assign to (employee email)</label>
+                    <input type="email" id="assetEmail" placeholder="employee@company.com" required>
+                    <p id="assetError" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Assign Asset</button>
+                </form>
+            </div>
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Asset</th><th>Tag</th><th>Assigned To</th><th>Status</th></tr></thead>
+                        <tbody id="assetList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="reports" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Reports &amp; Analytics</h2>
+                    <p>Quick insights from your PeoplePulse workspace.</p>
+                </div>
+            </div>
+            <div id="reportsContent" class="stats-grid"></div>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>My Profile</h2>
+                    <p>Keep your contact and role information up to date.</p>
+                </div>
+            </div>
+            <div class="content-card">
+                <form id="profileForm" class="module-form">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                    <label for="profileEmail">Email Address</label>
+                    <input type="email" id="profileEmail" readonly>
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone" placeholder="Phone number">
+                    <div id="employeeProfileFields">
+                        <label for="profileDepartment">Department</label>
+                        <input type="text" id="profileDepartment" placeholder="Department">
+                        <label for="profileJobTitle">Job Title</label>
+                        <input type="text" id="profileJobTitle" placeholder="Job title">
+                    </div>
+                    <p id="profileMessage" class="error-message"></p>
+                    <button class="primary-btn" type="submit">Save Profile</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ADMIN ACCOUNT ACCESS -->
+        <section id="accounts" class="page hidden">
+            <div class="section-heading">
+                <div>
+                    <h2>Account Access</h2>
+                    <p>Create and review HR and employee sign-in accounts.</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h2>Create HR Account</h2>
+                <form id="provisionHRForm" class="leave-request-form">
+                    <label for="hrName">Full Name</label>
+                    <input type="text" id="hrName" placeholder="HR manager name" required>
+                    <label for="hrEmail">Email Address</label>
+                    <input type="email" id="hrEmail" placeholder="hr@company.com" required>
+                    <label for="hrPassword">Temporary Password</label>
+                    <input type="password" id="hrPassword" minlength="6" placeholder="At least 6 characters" required>
+                    <p id="accountError" class="error-message"></p>
+                    <button type="submit" class="primary-btn">Create HR Account</button>
+                </form>
+            </div>
+
+            <div class="content-card">
+                <div class="section-heading">
+                    <div>
+                        <h2>Registered Accounts</h2>
+                        <p>Accounts available to sign in to PeoplePulse.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
                         <thead>
                             <tr>
-                                <th>EMPLOYEE</th>
-                                <th>BASIC SALARY</th>
-                                <th>ALLOWANCES</th>
-                                <th>DEDUCTIONS</th>
-                                <th>NET SALARY</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Account Type</th>
                             </tr>
                         </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>Rahul Kumar</td>
-                                <td>₹55,000</td>
-                                <td>₹8,000</td>
-                                <td>₹5,000</td>
-                                <td><strong>₹58,000</strong></td>
-                            </tr>
-
-                            <tr>
-                                <td>Sneha Reddy</td>
-                                <td>₹48,000</td>
-                                <td>₹7,000</td>
-                                <td>₹4,000</td>
-                                <td><strong>₹51,000</strong></td>
-                            </tr>
-
-                        </tbody>
-
+                        <tbody id="accountList"></tbody>
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- ================= PERFORMANCE ================= -->
-
-        <section class="page" id="performance">
-
-            <div class="section-heading">
-
-                <div>
-                    <span class="section-label">ANALYTICS</span>
-                    <h2>Performance</h2>
-                    <p>Track employee performance and productivity.</p>
-                </div>
-
-                <button class="primary-btn">
-                    + Add Review
-                </button>
-
-            </div>
-
-            <div class="performance-grid">
-
-                <div class="performance-card">
-
-                    <div class="employee-cell">
-                        <div class="person-avatar">RK</div>
-                        <div>
-                            <strong>Rahul Kumar</strong>
-                            <small>Software Developer</small>
-                        </div>
-                    </div>
-
-                    <div class="score">
-                        <strong>92%</strong>
-                        <span>Excellent</span>
-                    </div>
-
-                    <div class="progress">
-                        <i style="width:92%"></i>
-                    </div>
-
-                    <p>Last reviewed: September 2026</p>
-
-                </div>
-
-
-                <div class="performance-card">
-
-                    <div class="employee-cell">
-                        <div class="person-avatar pink">SR</div>
-                        <div>
-                            <strong>Sneha Reddy</strong>
-                            <small>HR Executive</small>
-                        </div>
-                    </div>
-
-                    <div class="score">
-                        <strong>86%</strong>
-                        <span>Very Good</span>
-                    </div>
-
-                    <div class="progress">
-                        <i style="width:86%"></i>
-                    </div>
-
-                    <p>Last reviewed: September 2026</p>
-
-                </div>
-
-
-                <div class="performance-card">
-
-                    <div class="employee-cell">
-                        <div class="person-avatar orange">AS</div>
-                        <div>
-                            <strong>Arjun Singh</strong>
-                            <small>Accountant</small>
-                        </div>
-                    </div>
-
-                    <div class="score">
-                        <strong>78%</strong>
-                        <span>Good</span>
-                    </div>
-
-                    <div class="progress">
-                        <i style="width:78%"></i>
-                    </div>
-
-                    <p>Last reviewed: September 2026</p>
-
-                </div>
-
-            </div>
-
-        </section>
-
+        <footer>© 2026 PeoplePulse. Built for better people management.</footer>
     </main>
-
 </div>
-
-
-<!-- ================= MODAL ================= -->
-
-<div class="modal" id="employeeModal">
-
-    <div class="modal-box">
-
-        <button class="modal-close"
-                onclick="closeEmployeeModal()">
-            ×
-        </button>
-
-        <div class="modal-icon">♙</div>
-
-        <h2>Add New Employee</h2>
-        <p>Enter employee details below.</p>
-
-        <label>Full Name</label>
-        <input id="newName"
-               placeholder="Enter employee name">
-
-        <label>Department</label>
-        <select id="newDepartment">
-            <option>IT</option>
-            <option>HR</option>
-            <option>Finance</option>
-            <option>Marketing</option>
-            <option>Operations</option>
-        </select>
-
-        <label>Position</label>
-        <input id="newPosition"
-               placeholder="Enter position">
-
-        <button class="primary-btn modal-submit"
-                onclick="addEmployee()">
-            Add Employee
-        </button>
-
-    </div>
-
-</div>
-
 
 <script src="script.js"></script>
-
 </body>
 </html>
