@@ -10,6 +10,7 @@ const COURSE_KEY = "emsCourses";
 const ENROLLMENT_KEY = "emsEnrollments";
 const ASSET_KEY = "emsAssets";
 const PROFILE_KEY = "emsProfiles";
+const NOTIFICATION_KEY = "emsNotifications";
 const CURRENT_USER_KEY = "emsCurrentUser";
 
 const demoAccounts = [
@@ -33,6 +34,7 @@ function showSignup() {
     document.getElementById("loginSection").classList.add("hidden");
     document.getElementById("signupSection").classList.remove("hidden");
     clearMessage("signupError");
+    updateSignupRole();
 }
 
 function showLogin() {
@@ -47,6 +49,34 @@ function clearMessage(id) {
 
 function showMessage(id, message) {
     document.getElementById(id).textContent = message;
+}
+
+function updateSignupRole() {
+    const employee = document.getElementById("signupRole").value === "Employee";
+    document.getElementById("employeeSignupDetails").classList.toggle("hidden", !employee);
+    ["signupPhone", "signupDepartment", "signupJobTitle", "signupJoiningDate"].forEach(id => {
+        document.getElementById(id).required = employee;
+    });
+    document.getElementById("signupButtonLabel").textContent =
+        `Create ${roleLabel(document.getElementById("signupRole").value)} Account →`;
+    document.getElementById("signupHelp").textContent = employee
+        ? "HR will be notified with your profile details when you create your employee account."
+        : "Create an account for the selected workspace.";
+}
+
+function addHRNotification(type, title, message, details) {
+    const notifications = readStorage(NOTIFICATION_KEY);
+    notifications.unshift({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        recipientRole: "HR",
+        type,
+        title,
+        message,
+        details,
+        createdAt: new Date().toISOString(),
+        read: false
+    });
+    saveStorage(NOTIFICATION_KEY, notifications);
 }
 
 function login(event) {
@@ -80,6 +110,7 @@ function createAccount(event) {
     const email = document.getElementById("signupEmail").value.trim().toLowerCase();
     const password = document.getElementById("signupPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
+    const role = document.getElementById("signupRole").value;
     const accounts = readStorage(ACCOUNT_KEY);
     const emailExists = [...demoAccounts, ...accounts].some(user =>
         user.email.toLowerCase() === email
@@ -95,25 +126,49 @@ function createAccount(event) {
         return;
     }
 
-    const account = { name, email, password, role: "Employee" };
+    const account = { name, email, password, role };
+    if (role === "Employee") {
+        account.phone = document.getElementById("signupPhone").value.trim();
+        account.department = document.getElementById("signupDepartment").value;
+        account.jobRole = document.getElementById("signupJobTitle").value.trim();
+        account.joiningDate = document.getElementById("signupJoiningDate").value;
+    }
     accounts.push(account);
     saveStorage(ACCOUNT_KEY, accounts);
 
-    const employees = readStorage(EMPLOYEE_KEY);
-    employees.push({
-        name,
-        email,
-        department: "Unassigned",
-        jobRole: "Employee"
-    });
-    saveStorage(EMPLOYEE_KEY, employees);
+    if (role === "Employee") {
+        const employees = readStorage(EMPLOYEE_KEY);
+        employees.push({
+            name,
+            email,
+            phone: account.phone,
+            department: account.department,
+            jobRole: account.jobRole,
+            joiningDate: account.joiningDate
+        });
+        saveStorage(EMPLOYEE_KEY, employees);
+        addHRNotification(
+            "employee_registration",
+            "New employee registration",
+            `${name} created an employee account.`,
+            {
+                name,
+                email,
+                phone: account.phone,
+                department: account.department,
+                jobTitle: account.jobRole,
+                joiningDate: account.joiningDate
+            }
+        );
+    }
 
     document.getElementById("loginEmail").value = email;
-    document.getElementById("loginRole").value = "Employee";
+    document.getElementById("loginRole").value = role;
     document.getElementById("loginPassword").value = "";
     document.getElementById("signupForm").reset();
+    updateSignupRole();
     showLogin();
-    showMessage("loginError", "Employee account created. Sign in with your new credentials.");
+    showMessage("loginError", `${roleLabel(role)} account created. Sign in with your new credentials.`);
 }
 
 function openApplication() {
@@ -141,16 +196,18 @@ function openApplication() {
         const page = button.dataset.page;
         button.classList.toggle("hidden",
             (employee && page === "employees") ||
-            (currentUser.role !== "Admin" && page === "accounts")
+            (currentUser.role !== "Admin" && page === "accounts") ||
+            (employee && page === "notifications")
         );
     });
 
+    document.getElementById("hrNotificationSummary").classList.toggle("hidden", employee);
     document.getElementById("addEmployeeButton").classList.toggle("hidden", employee);
     document.getElementById("markPresentButton").textContent = employee
         ? "＋ Mark My Attendance"
         : "＋ Mark Present";
     document.getElementById("leaveRequestCard").classList.toggle("hidden", !employee);
-    document.getElementById("payrollFormCard").classList.toggle("hidden", employee);
+    document.getElementById("payrollFormCard").classList.toggle("hidden", currentUser.role !== "HR");
     document.getElementById("reviewFormCard").classList.toggle("hidden", employee);
     document.getElementById("jobFormCard").classList.toggle("hidden", employee);
     document.getElementById("applicationsCard").classList.toggle("hidden", employee);
@@ -175,7 +232,8 @@ function roleLabel(role) {
 function showPage(pageId) {
     const employeeRestricted = currentUser && currentUser.role === "Employee" && pageId === "employees";
     const adminRestricted = currentUser && currentUser.role !== "Admin" && pageId === "accounts";
-    if (employeeRestricted || adminRestricted) return;
+    const notificationRestricted = currentUser && currentUser.role === "Employee" && pageId === "notifications";
+    if (employeeRestricted || adminRestricted || notificationRestricted) return;
 
     document.querySelectorAll(".page").forEach(page => {
         page.classList.toggle("hidden", page.id !== pageId);
@@ -208,8 +266,10 @@ function getEmployees() {
             employees.push({
                 name: account.name,
                 email: account.email,
-                department: "Unassigned",
-                jobRole: "Employee",
+                phone: account.phone || "",
+                department: account.department || "Unassigned",
+                jobRole: account.jobRole || roleLabel(account.role),
+                joiningDate: account.joiningDate || "",
                 ...profile
             });
         }
@@ -222,6 +282,7 @@ function renderAll() {
     renderAttendance();
     renderLeaves();
     renderDashboard();
+    renderNotifications();
     renderPayroll();
     renderReviews();
     renderRecruitment();
@@ -230,6 +291,60 @@ function renderAll() {
     renderReports();
     renderProfile();
     if (currentUser.role === "Admin") renderAccounts();
+}
+
+function renderNotifications() {
+    const notifications = readStorage(NOTIFICATION_KEY)
+        .filter(notification => notification.recipientRole === "HR")
+        .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+    const unread = notifications.filter(notification => !notification.read);
+    const navButton = document.querySelector('[data-page="notifications"]');
+    navButton.textContent = unread.length
+        ? `🔔 Notifications (${unread.length})`
+        : "🔔 Notifications";
+
+    const summary = document.getElementById("hrNotificationSummary");
+    summary.classList.toggle("hidden", !isManager() || unread.length === 0);
+    if (unread.length) {
+        const latest = unread[0];
+        document.getElementById("hrNotificationMessage").textContent =
+            `${unread.length} new notification${unread.length === 1 ? "" : "s"} for HR. Latest: ${latest.title}.`;
+        document.getElementById("hrNotificationDetails").textContent =
+            Object.entries(latest.details || {})
+                .map(([label, value]) => `${label}: ${value}`)
+                .join(" · ");
+    } else {
+        document.getElementById("hrNotificationMessage").textContent = "";
+        document.getElementById("hrNotificationDetails").textContent = "";
+    }
+
+    document.getElementById("notificationList").innerHTML = notifications.map(notification => {
+        const details = Object.entries(notification.details || {})
+            .map(([label, value]) => `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}`)
+            .join("<br>");
+        const action = notification.read
+            ? "—"
+            : `<button class="approve-btn" onclick="markNotificationRead('${escapeAttribute(notification.id)}')">Mark read</button>`;
+        return `<tr>
+            <td><strong>${escapeHtml(notification.title)}</strong><br>${escapeHtml(notification.message)}</td>
+            <td>${details}</td>
+            <td>${escapeHtml(new Date(notification.createdAt).toLocaleString())}</td>
+            <td><span class="status ${notification.read ? "approved" : "pending"}">${notification.read ? "Read" : "New"}</span></td>
+            <td>${action}</td>
+        </tr>`;
+    }).join("") || '<tr><td colspan="5">No HR notifications yet.</td></tr>';
+}
+
+function markNotificationRead(notificationId) {
+    if (!isManager()) return;
+    const notifications = readStorage(NOTIFICATION_KEY);
+    const notification = notifications.find(item =>
+        item.id === notificationId && item.recipientRole === "HR"
+    );
+    if (!notification) return;
+    notification.read = true;
+    saveStorage(NOTIFICATION_KEY, notifications);
+    renderNotifications();
 }
 
 function renderDashboard() {
@@ -429,9 +544,16 @@ function submitLeaveRequest(event) {
     const leaves = readStorage(LEAVE_KEY);
     leaves.push({ name: currentUser.name, email: currentUser.email, type, start, end, days, status: "Pending" });
     saveStorage(LEAVE_KEY, leaves);
+    addHRNotification(
+        "leave_request",
+        "New leave request",
+        `${currentUser.name} submitted a ${type.toLowerCase()} request.`,
+        { name: currentUser.name, email: currentUser.email, leaveType: type, startDate: start, endDate: end, days }
+    );
     document.getElementById("leaveRequestForm").reset();
     renderLeaves();
     renderDashboard();
+    renderNotifications();
 }
 
 function updateLeave(index, status) {
@@ -483,7 +605,7 @@ function renderPayroll() {
 function savePayroll(event) {
     event.preventDefault();
     clearMessage("payrollError");
-    if (!isManager()) return;
+    if (currentUser.role !== "HR") return;
 
     const email = document.getElementById("payrollEmail").value.trim().toLowerCase();
     const employee = employeeByEmail(email);
@@ -781,7 +903,7 @@ function renderProfile() {
     const employee = employeeByEmail(currentUser.email) || {};
     document.getElementById("profileName").value = currentUser.name;
     document.getElementById("profileEmail").value = currentUser.email;
-    document.getElementById("profilePhone").value = profile.phone || "";
+    document.getElementById("profilePhone").value = profile.phone || currentUser.phone || "";
     document.getElementById("profileDepartment").value = employee.department || "";
     document.getElementById("profileJobTitle").value = employee.jobRole || "";
 }
@@ -815,6 +937,7 @@ function saveProfile(event) {
     const employee = employees.find(item => item.email.toLowerCase() === currentUser.email.toLowerCase());
     if (employee && currentUser.role === "Employee") {
         employee.name = name;
+        employee.phone = profile.phone;
         employee.department = profile.department;
         employee.jobRole = profile.jobRole;
         saveStorage(EMPLOYEE_KEY, employees);
@@ -853,6 +976,7 @@ function logout() {
 
 document.getElementById("loginForm").addEventListener("submit", login);
 document.getElementById("signupForm").addEventListener("submit", createAccount);
+document.getElementById("signupRole").addEventListener("change", updateSignupRole);
 document.getElementById("addEmployeeForm").addEventListener("submit", addEmployee);
 document.getElementById("leaveRequestForm").addEventListener("submit", submitLeaveRequest);
 document.getElementById("provisionHRForm").addEventListener("submit", provisionHRAccount);
@@ -871,3 +995,9 @@ if (storedUser) {
     currentUser = JSON.parse(storedUser);
     openApplication();
 }
+
+window.addEventListener("storage", event => {
+    if (event.key === NOTIFICATION_KEY && currentUser && isManager()) {
+        renderNotifications();
+    }
+});
