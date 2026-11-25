@@ -29,7 +29,8 @@ button {
     justify-content: center;
     align-items: center;
     padding: 35px 20px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     isolation: isolate;
     background:
         radial-gradient(ellipse at 12% 20%, rgba(100,75,230,.65), transparent 38%),
@@ -522,6 +523,13 @@ button {
     box-shadow: 0 5px 20px rgba(37,38,65,.035);
 }
 
+.notification-details {
+    color: #77778e;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
 .leave-request-form {
     max-width: 460px;
     margin-top: 18px;
@@ -863,7 +871,7 @@ footer {
     }
 
     .content-card {
-        padding: 14px;
+        padding: 14px; 
     }
 
     .login-card {
